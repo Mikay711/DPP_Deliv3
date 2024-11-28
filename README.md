@@ -6,6 +6,7 @@ This repository contains code and processed data for Deliverable 3, focusing on 
 
 ## Structure
 - `data_processing.Rmd`: RMarkdown file for processing and rescaling the datasets.
+- `data_processing.html`: [View the HTML version of the processing code](https://mikay711.github.io/DPP_Deliv3/Deliv3.html).
 - `Processed Data/`: Folder containing:
   - `Spotify_Rescaled.csv`
   - `Hot100_Rescaled.csv`
