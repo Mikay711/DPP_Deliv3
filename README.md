@@ -5,8 +5,8 @@ This repository contains code and processed data for Deliverable 3, focusing on 
 - **Billboard Hot 100 Songs (2023)**
 
 ## Structure
-- `data_processing.Rmd`: RMarkdown file for processing and rescaling the datasets.
-- `data_processing.html`: [View the HTML version of the processing code](https://mikay711.github.io/DPP_Deliv3/Deliv3.html).
+- `Deliv_3.Rmd`: RMarkdown file for processing and rescaling the datasets.
+- `Deliv_3.html`: [View the HTML version of the processing code](https://mikay711.github.io/DPP_Deliv3/Deliv_3.html).
 - `Processed Data/`: Folder containing:
   - `Spotify_Rescaled.csv`
   - `Hot100_Rescaled.csv`
@@ -21,6 +21,5 @@ This repository contains code and processed data for Deliverable 3, focusing on 
    - Grouped `Weeks in Charts` into ranges like "1-10," "11-20," etc.
 
 ## How to Use
-- View the processing steps in `data_processing.html`.
+- View the processing steps in `Deliv_3.html`.
 - Access processed data in the `Processed Data/` folder.
-
