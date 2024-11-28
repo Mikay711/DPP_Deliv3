@@ -1,0 +1,105 @@
+---
+title: "Deliverable 3"
+author: "Michaela Bowen"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##LOading Data
+
+```{r}
+
+# Load libraries
+library(readr)
+library(dplyr)
+
+# Load Spotify data from GitHub
+spotify_data <- read.csv("https://raw.githubusercontent.com/Mikay711/DPP_Deliv3/main/Spotify_Cleaned.csv")
+
+# Load Hot100 data from GitHub
+hot100_data <- read.csv("https://raw.githubusercontent.com/Mikay711/DPP_Deliv3/main/Hot100_2023_Cleaned.csv")
+
+
+# Preview the data
+head(spotify_data)
+head(hot100_data)
+
+
+
+```
+
+##Rescaling Spotify Data
+
+```{r}
+# Rescale percentage attributes in Spotify data to 0–1
+spotify_data <- spotify_data %>%
+  mutate(
+    danceability_scaled = `danceability_%` / 100,
+    valence_scaled = `valence_%` / 100,
+    energy_scaled = `energy_%` / 100,
+    acousticness_scaled = `acousticness_%` / 100,
+    instrumentalness_scaled = `instrumentalness_%` / 100,
+    liveness_scaled = `liveness_%` / 100,
+    speechiness_scaled = `speechiness_%` / 100
+  )
+
+# Spotify: Categorize 'streams' into "low", "medium", "high"
+spotify_data <- spotify_data %>%
+  mutate(
+    stream_category = case_when(
+      streams < 500000000 ~ "low",
+      streams < 1000000000 ~ "medium",
+      TRUE ~ "high"
+    )
+  )
+
+head(spotify_data)
+
+```
+
+##Rescaling Hot 100 2023 Data
+
+```{r}
+
+hot100_data <- hot100_data %>%
+  mutate(`Weeks in Charts` = ifelse(`Weeks in Charts` == "-", NA, `Weeks in Charts`))
+
+hot100_data <- hot100_data %>%
+  mutate(`Weeks in Charts` = as.numeric(`Weeks in Charts`))
+
+# Hot100: Categorize 'Rank' into "Top 10", "Top 50", "Top 100"
+hot100_data <- hot100_data %>%
+  mutate(
+    rank_category = case_when(
+      Rank <= 10 ~ "Top 10",
+      Rank <= 50 ~ "Top 50",
+      TRUE ~ "Top 100"
+    )
+  )
+
+# Hot100: Group 'Weeks in Charts' into ranges
+hot100_data <- hot100_data %>%
+  mutate(
+    weeks_category = case_when(
+      as.numeric(`Weeks in Charts`) <= 10 ~ "1-10",
+      as.numeric(`Weeks in Charts`) <= 20 ~ "11-20",
+      as.numeric(`Weeks in Charts`) <= 30 ~ "21-30",
+      TRUE ~ "31+"
+    )
+  )
+
+head(hot100_data)
+```
+
+##Save Processed Data
+```{r}
+write_csv(spotify_data, "Processed Data/Spotify_Rescaled.csv")
+write_csv(hot100_data, "Processed Data/Hot100_Rescaled.csv")
+
+
+```
+
