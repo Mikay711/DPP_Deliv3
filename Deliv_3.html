@@ -357,43 +357,20 @@ display: none;
 </div>
 
 
-<p>##LOading Data</p>
+<div id="loading-data" class="section level2">
+<h2>Loading Data</h2>
 <pre class="r"><code># Load libraries
-library(readr)</code></pre>
-<pre><code>## Warning: package &#39;readr&#39; was built under R version 4.2.3</code></pre>
-<pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>## Warning: package &#39;dplyr&#39; was built under R version 4.2.3</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code># Read Spotify data from GitHub
-spotify_data &lt;- read_csv(&quot;https://github.com/Mikay711/DPP_Deliv3/raw/main/Spotify_Cleaned.csv&quot;)</code></pre>
-<pre><code>## Rows: 953 Columns: 17</code></pre>
-<pre><code>## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr   (6): track_name, artist(s)_name, streams, key, mode, cover_url
-## dbl  (10): in_spotify_playlists, in_spotify_charts, bpm, danceability_%, val...
-## date  (1): release_date
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code># Read Hot100 data from GitHub
-hot100_data &lt;- read_csv(&quot;https://github.com/Mikay711/DPP_Deliv3/raw/main/Hot100_2023_Cleaned.csv&quot;)</code></pre>
-<pre><code>## Rows: 5200 Columns: 7
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr  (3): Song, Artist, Weeks in Charts
-## dbl  (3): Rank, Peak Position, Week
-## date (1): Date
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code># Preview the data
+library(readr)
+library(dplyr)
+
+# Load Spotify data from GitHub
+spotify_data &lt;- read_csv(&quot;https://raw.githubusercontent.com/Mikay711/DPP_Deliv3/refs/heads/main/Spotify_Cleaned.csv&quot;)
+
+# Load Hot100 data from GitHub
+hot100_data &lt;- read_csv(&quot;https://raw.githubusercontent.com/Mikay711/DPP_Deliv3/refs/heads/main/Hot100_2023_Cleaned.csv&quot;)
+
+
+# Preview the data
 head(spotify_data)</code></pre>
 <pre><code>## # A tibble: 6 × 17
 ##   track_name     `artist(s)_name` in_spotify_playlists in_spotify_charts streams
@@ -418,7 +395,18 @@ head(spotify_data)</code></pre>
 ## 4 2023-01-04 Last Christmas Wham!      4               4 31                    1
 ## 5 2023-01-04 A Holly Jolly… Burl …     5               4 32                    1
 ## 6 2023-01-04 It&#39;s The Most… Andy …     6               5 33                    1</code></pre>
-<p>##Rescaling Spotify Data</p>
+</div>
+<div id="rescaling-spotify-data" class="section level2">
+<h2>Rescaling Spotify Data</h2>
+<p>In this section, we process the Spotify Most Streamed Songs dataset
+to:</p>
+<ul>
+<li><p>Normalize percentage-based attributes (e.g.,
+<code>danceability</code>, <code>valence</code>, <code>energy</code>) to
+a scale of 0–1 for consistency.</p></li>
+<li><p>Categorize song stream counts into “low,” “medium,” and “high”
+based on thresholds.</p></li>
+</ul>
 <pre class="r"><code># Rescale percentage attributes in Spotify data to 0–1
 spotify_data &lt;- spotify_data %&gt;%
   mutate(
@@ -458,7 +446,18 @@ head(spotify_data)</code></pre>
 ## #   danceability_scaled &lt;dbl&gt;, valence_scaled &lt;dbl&gt;, energy_scaled &lt;dbl&gt;,
 ## #   acousticness_scaled &lt;dbl&gt;, instrumentalness_scaled &lt;dbl&gt;,
 ## #   liveness_scaled &lt;dbl&gt;, speechiness_scaled &lt;dbl&gt;, stream_category &lt;chr&gt;</code></pre>
-<p>##Rescaling Hot 100 2023 Data</p>
+</div>
+<div id="rescaling-hot-100-2023-data" class="section level2">
+<h2>Rescaling Hot 100 2023 Data</h2>
+<p>In this section, we process the Billboard Hot100 dataset to:</p>
+<ul>
+<li><p>Handle missing values in the <code>Weeks in Charts</code>
+column.</p></li>
+<li><p>Categorize song ranks into “Top 10,” “Top 50,” and “Top
+100.”</p></li>
+<li><p>Group the number of weeks on the charts into meaningful ranges
+(“1-10,” “11-20,” etc.).</p></li>
+</ul>
 <pre class="r"><code>hot100_data &lt;- hot100_data %&gt;%
   mutate(`Weeks in Charts` = ifelse(`Weeks in Charts` == &quot;-&quot;, NA, `Weeks in Charts`))
 
@@ -497,9 +496,12 @@ head(hot100_data)</code></pre>
 ## 5 2023-01-04 A Holly Jolly… Burl …     5               4                32     1
 ## 6 2023-01-04 It&#39;s The Most… Andy …     6               5                33     1
 ## # ℹ 2 more variables: rank_category &lt;chr&gt;, weeks_category &lt;chr&gt;</code></pre>
-<p>##Save Processed Data</p>
+</div>
+<div id="save-processed-data" class="section level2">
+<h2>Save Processed Data</h2>
 <pre class="r"><code>write_csv(spotify_data, &quot;Processed Data/Spotify_Rescaled.csv&quot;)
 write_csv(hot100_data, &quot;Processed Data/Hot100_Rescaled.csv&quot;)</code></pre>
+</div>
 
 
 

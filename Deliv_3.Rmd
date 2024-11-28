@@ -9,19 +9,19 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##LOading Data
+## Loading Data
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 
 # Load libraries
 library(readr)
 library(dplyr)
 
 # Load Spotify data from GitHub
-spotify_data <- read.csv("https://raw.githubusercontent.com/Mikay711/DPP_Deliv3/main/Spotify_Cleaned.csv")
+spotify_data <- read_csv("https://raw.githubusercontent.com/Mikay711/DPP_Deliv3/refs/heads/main/Spotify_Cleaned.csv")
 
 # Load Hot100 data from GitHub
-hot100_data <- read.csv("https://raw.githubusercontent.com/Mikay711/DPP_Deliv3/main/Hot100_2023_Cleaned.csv")
+hot100_data <- read_csv("https://raw.githubusercontent.com/Mikay711/DPP_Deliv3/refs/heads/main/Hot100_2023_Cleaned.csv")
 
 
 # Preview the data
@@ -32,9 +32,15 @@ head(hot100_data)
 
 ```
 
-##Rescaling Spotify Data
+## Rescaling Spotify Data
 
-```{r}
+In this section, we process the Spotify Most Streamed Songs dataset to:
+
+-   Normalize percentage-based attributes (e.g., `danceability`, `valence`, `energy`) to a scale of 0–1 for consistency.
+
+-   Categorize song stream counts into "low," "medium," and "high" based on thresholds.
+
+```{r, message=FALSE, warning=FALSE}
 # Rescale percentage attributes in Spotify data to 0–1
 spotify_data <- spotify_data %>%
   mutate(
@@ -61,9 +67,17 @@ head(spotify_data)
 
 ```
 
-##Rescaling Hot 100 2023 Data
+## Rescaling Hot 100 2023 Data
 
-```{r}
+In this section, we process the Billboard Hot100 dataset to:
+
+-   Handle missing values in the `Weeks in Charts` column.
+
+-   Categorize song ranks into "Top 10," "Top 50," and "Top 100."
+
+-   Group the number of weeks on the charts into meaningful ranges ("1-10," "11-20," etc.).
+
+```{r, message=FALSE, warning=FALSE}
 
 hot100_data <- hot100_data %>%
   mutate(`Weeks in Charts` = ifelse(`Weeks in Charts` == "-", NA, `Weeks in Charts`))
@@ -95,11 +109,11 @@ hot100_data <- hot100_data %>%
 head(hot100_data)
 ```
 
-##Save Processed Data
-```{r}
+## Save Processed Data
+
+```{r, message=FALSE, warning=FALSE}
 write_csv(spotify_data, "Processed Data/Spotify_Rescaled.csv")
 write_csv(hot100_data, "Processed Data/Hot100_Rescaled.csv")
 
 
 ```
-
