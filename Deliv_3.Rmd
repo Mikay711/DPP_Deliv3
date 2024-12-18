@@ -53,7 +53,11 @@ spotify_data <- spotify_data %>%
     speechiness_scaled = `speechiness_%` / 100
   )
 
-# Spotify: Categorize 'streams' into "low", "medium", "high"
+# Ensure 'streams' is numeric
+spotify_data <- spotify_data %>%
+  mutate(streams = as.numeric(streams))
+
+# Categorize 'streams' into "low," "medium," "high"
 spotify_data <- spotify_data %>%
   mutate(
     stream_category = case_when(
@@ -63,7 +67,12 @@ spotify_data <- spotify_data %>%
     )
   )
 
+# Check the distribution of stream categories
+table(spotify_data$stream_category)
+
+# Preview the updated dataset
 head(spotify_data)
+
 
 ```
 
